@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nexora Player</string>
+    <string name="app_tagline">Premium 4K Media Player</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_videos">Videos</string>
+    <string name="nav_folders">Folders</string>
+    <string name="nav_playlists">Playlists</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Home sections -->
+    <string name="section_continue_watching">Continue Watching</string>
+    <string name="section_recently_added">Recently Added</string>
+    <string name="section_all_videos">All Videos</string>
+    <string name="section_favorites">Favorites</string>
+    <string name="section_folders">Folders</string>
+    <string name="section_playlists">Playlists</string>
+
+    <!-- Empty states -->
+    <string name="empty_no_videos_title">No videos found</string>
+    <string name="empty_no_videos_subtitle">Scan your device or choose a folder to build your library</string>
+    <string name="action_scan_storage">Scan Storage</string>
+    <string name="action_choose_folder">Choose Folder</string>
+    <string name="empty_no_favorites">No favorites yet</string>
+    <string name="empty_no_history">No watch history yet</string>
+    <string name="empty_no_playlists">No playlists yet</string>
+    <string name="empty_search_hint">Search by filename, folder or playlist</string>
+
+    <!-- Player -->
+    <string name="player_resume_title">Resume playback?</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_start_over">Start Over</string>
+    <string name="player_locked">Controls locked</string>
+    <string name="error_playback_generic">Unable to play this video on this device.\nTry another decoder or format.</string>
+    <string name="error_file_missing">This file could not be found. It may have been moved or deleted.</string>
+    <string name="error_permission_denied">Permission denied. Grant media access to play this file.</string>
+    <string name="error_decoder_unavailable">This device has no decoder for this codec.</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_playback">Playback</string>
+    <string name="notification_channel_playback_desc">Media playback controls</string>
+
+    <!-- Permissions -->
+    <string name="permission_rationale_media">Nexora Player needs access to your videos to build your library. No files ever leave your device.</string>
+</resources>

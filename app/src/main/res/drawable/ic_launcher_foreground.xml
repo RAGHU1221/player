@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Minimal geometric play glyph: a soft red glow ring behind a clean white/red
+     play triangle, centered in the adaptive-icon safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Subtle glow -->
+    <path
+        android:pathData="M54,26 A28,28 0 1 1 53.9,26"
+        android:strokeColor="#33E8443D"
+        android:strokeWidth="10"
+        android:fillColor="#00000000" />
+
+    <!-- Ring -->
+    <path
+        android:pathData="M54,30 A24,24 0 1 1 53.9,30"
+        android:strokeColor="#FFE8443D"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+
+    <!-- Play triangle -->
+    <path
+        android:pathData="M46,40 L72,54 L46,68 Z"
+        android:fillColor="#FFF5F6FA" />
+</vector>

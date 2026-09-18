@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Nothing here excludes user media (media is never in app-private storage),
+   only app databases/preferences are backed up so favorites/playlists/history
+   survive a device restore.
+-->
+<full-backup-content>
+    <include domain="database" path="." />
+    <include domain="sharedpref" path="." />
+    <exclude domain="database" path="nexora_player.db-wal" />
+    <exclude domain="database" path="nexora_player.db-shm" />
+</full-backup-content>

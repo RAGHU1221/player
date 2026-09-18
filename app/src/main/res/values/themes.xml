@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base theme: the app is dark-only by design (matches the reference UI),
+         so this extends the plain (non-DayNight) Material3 dark theme. -->
+    <style name="Theme.NexoraPlayer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowBackground">@color/navy_glass_surface</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+    </style>
+
+    <!-- Shown for the instant between process start and the first Compose frame. -->
+    <style name="Theme.NexoraPlayer.Splash">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+</resources>

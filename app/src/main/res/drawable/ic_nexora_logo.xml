@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App wordmark glyph used in the Home top bar (see ui/components/NexoraLogo.kt) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path
+        android:pathData="M16,2 A14,14 0 1 1 15.9,2"
+        android:strokeColor="#FFE8443D"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M13,10 L23,16 L13,22 Z"
+        android:fillColor="#FFF5F6FA" />
+</vector>
