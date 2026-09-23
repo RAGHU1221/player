@@ -1,9 +1,5 @@
 name: Build Nexora Player APK
 
-# Generates a real, compiled APK on every push/PR by building on GitHub's own
-# runners (which have full internet access to Google's Maven repo, unlike the
-# sandbox this project was authored in). Download the result from the
-# workflow run's "Summary" page under "Artifacts" once it finishes.
 on:
   push:
     branches: [ "main" ]
@@ -25,9 +21,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
