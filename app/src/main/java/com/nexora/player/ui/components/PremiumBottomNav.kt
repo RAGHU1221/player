@@ -1,6 +1,5 @@
 package com.nexora.player.ui.components
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,10 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FolderOpen
@@ -24,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +52,7 @@ fun PremiumBottomNav(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 10.dp)
+            .neumorphic(cornerRadius = NexoraRadius.Pill)
             .clip(RoundedCornerShape(NexoraRadius.Pill))
             .background(colors.surface)
             .padding(vertical = 10.dp, horizontal = 6.dp),
@@ -71,31 +68,42 @@ fun PremiumBottomNav(
 @Composable
 private fun NavItem(item: BottomNavItem, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.nexoraColors
-    val indicatorWidth by animateDpAsState(if (selected) 20.dp else 0.dp, label = "indicator")
     val interactionSource = remember { MutableInteractionSource() }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clickable(indication = null, interactionSource = interactionSource, onClick = onClick)
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
-        Icon(
-            item.icon,
-            contentDescription = item.label,
-            tint = if (selected) colors.accent else colors.textTertiary,
-            modifier = Modifier.size(24.dp),
-        )
+        // Selected tab reads as a pressed-in ("inset") neumorphic pill behind the
+        // icon — the classic soft-UI way to show an active control, in place of
+        // a flat accent-colored underline.
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .then(
+                    if (selected) {
+                        Modifier
+                            .neumorphic(cornerRadius = NexoraRadius.Pill, elevation = 4.dp, pressed = true)
+                            .clip(RoundedCornerShape(NexoraRadius.Pill))
+                            .background(colors.surface)
+                    } else {
+                        Modifier
+                    },
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                item.icon,
+                contentDescription = item.label,
+                tint = if (selected) colors.accent else colors.textTertiary,
+                modifier = Modifier.size(22.dp),
+            )
+        }
         Text(
             text = item.label,
             style = MaterialTheme.typography.labelMedium,
             color = if (selected) colors.textPrimary else colors.textTertiary,
-        )
-        Box(
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .height(2.dp)
-                .width(indicatorWidth)
-                .background(colors.accent, RoundedCornerShape(2.dp)),
         )
     }
 }

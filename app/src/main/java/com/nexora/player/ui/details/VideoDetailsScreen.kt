@@ -133,7 +133,7 @@ fun VideoDetailsScreen(videoId: Long, onBack: () -> Unit, onPlay: (Long) -> Unit
                         Icon(Icons.Filled.Edit, contentDescription = "Rename", tint = colors.textPrimary)
                     }
                     OutlinedButton(onClick = { showDeleteConfirm = true }) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = colors.accent)
+                        Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = colors.danger)
                     }
                 }
 
@@ -161,7 +161,7 @@ fun VideoDetailsScreen(videoId: Long, onBack: () -> Unit, onPlay: (Long) -> Unit
             title = { Text("Delete this video?") },
             text = { Text("This will permanently delete the file from your device. This can't be undone.") },
             confirmButton = {
-                TextButton(onClick = { showDeleteConfirm = false; viewModel.requestDelete() }) { Text("Delete", color = colors.accent) }
+                TextButton(onClick = { showDeleteConfirm = false; viewModel.requestDelete() }) { Text("Delete", color = colors.danger) }
             },
             dismissButton = { TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") } },
         )

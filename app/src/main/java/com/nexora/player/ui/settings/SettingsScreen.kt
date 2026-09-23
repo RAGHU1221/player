@@ -211,9 +211,20 @@ private fun ThemeSwatch(variant: NexoraThemeVariant, selected: Boolean, onClick:
                 .padding(bottom = 4.dp)
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(extended.accent)
-                .then(if (selected) Modifier.border(2.dp, extended.textPrimary, CircleShape) else Modifier),
-        )
+                .background(extended.surface)
+                .border(1.dp, extended.shadowDark, CircleShape)
+                .then(if (selected) Modifier.border(2.dp, extended.accent, CircleShape) else Modifier),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (selected) {
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier
+                        .size(12.dp)
+                        .clip(CircleShape)
+                        .background(extended.accent),
+                )
+            }
+        }
         Text(variant.displayName, color = MaterialTheme.nexoraColors.textSecondary, style = MaterialTheme.typography.labelMedium)
     }
 }

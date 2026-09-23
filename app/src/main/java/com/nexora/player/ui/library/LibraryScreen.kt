@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
@@ -38,6 +39,7 @@ import com.nexora.player.domain.model.LibraryFilter
 import com.nexora.player.domain.model.SortOption
 import com.nexora.player.domain.model.Video
 import com.nexora.player.ui.components.EmptyState
+import com.nexora.player.ui.components.SectionHeader
 import com.nexora.player.ui.components.VideoCard
 import com.nexora.player.ui.theme.nexoraColors
 import com.nexora.player.util.GenericViewModelFactory
@@ -95,13 +97,32 @@ fun LibraryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
-                items(state.videos, key = { it.id }) { video ->
-                    VideoCard(
-                        video = video,
-                        onClick = { onVideoClick(video) },
-                        onToggleFavorite = { viewModel.toggleFavorite(video) },
-                        onMoreClick = { onVideoMore(video) },
-                    )
+                if (state.groupByFolder) {
+                    state.folderSections.forEach { section ->
+                        item(key = "header_${section.path}", span = { GridItemSpan(maxLineSpan) }) {
+                            SectionHeader(
+                                title = "${section.displayName} (${section.videos.size})",
+                                actionLabel = null,
+                            )
+                        }
+                        items(section.videos, key = { it.id }) { video ->
+                            VideoCard(
+                                video = video,
+                                onClick = { onVideoClick(video) },
+                                onToggleFavorite = { viewModel.toggleFavorite(video) },
+                                onMoreClick = { onVideoMore(video) },
+                            )
+                        }
+                    }
+                } else {
+                    items(state.videos, key = { it.id }) { video ->
+                        VideoCard(
+                            video = video,
+                            onClick = { onVideoClick(video) },
+                            onToggleFavorite = { viewModel.toggleFavorite(video) },
+                            onMoreClick = { onVideoMore(video) },
+                        )
+                    }
                 }
             }
         }

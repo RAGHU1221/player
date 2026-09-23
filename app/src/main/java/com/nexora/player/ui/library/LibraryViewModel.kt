@@ -16,8 +16,19 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/** One folder's worth of videos, in the "All Videos" folder-wise grouping. */
+data class FolderSection(
+    val path: String,
+    val displayName: String,
+    val videos: List<Video>,
+)
+
 data class LibraryUiState(
     val videos: List<Video> = emptyList(),
+    val folderSections: List<FolderSection> = emptyList(),
+    /** true only for the unfiltered "All Videos" screen — a single-folder view (opened
+     * from Folders) always stays a flat grid, since a header would just repeat itself. */
+    val groupByFolder: Boolean = false,
     val sortOption: SortOption = SortOption.RECENTLY_ADDED,
     val activeFilters: Set<LibraryFilter> = emptySet(),
     val isLoading: Boolean = true,
@@ -27,6 +38,8 @@ class LibraryViewModel(
     private val videoRepository: VideoRepository,
     initialFolderPath: String? = null,
 ) : ViewModel() {
+
+    private val groupByFolder = initialFolderPath == null
 
     private val sortOption = MutableStateFlow(SortOption.RECENTLY_ADDED)
     private val activeFilters = MutableStateFlow<Set<LibraryFilter>>(emptySet())
@@ -42,13 +55,30 @@ class LibraryViewModel(
         sortOption,
         activeFilters,
     ) { videos, sort, filters ->
+        val sorted = applySortAndFilter(videos, sort, filters)
         LibraryUiState(
-            videos = applySortAndFilter(videos, sort, filters),
+            videos = sorted,
+            folderSections = if (groupByFolder) buildFolderSections(sorted) else emptyList(),
+            groupByFolder = groupByFolder,
             sortOption = sort,
             activeFilters = filters,
             isLoading = false,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), LibraryUiState())
+
+    /** Groups the already sorted/filtered list by folder (order within each folder keeps
+     * the user's chosen sort), then orders the folders themselves alphabetically so the
+     * section order stays stable no matter which video sort is active. */
+    private fun buildFolderSections(videos: List<Video>): List<FolderSection> =
+        videos.groupBy { it.folderPath }
+            .map { (path, videosInFolder) ->
+                FolderSection(
+                    path = path,
+                    displayName = path.trimEnd('/').substringAfterLast('/').ifBlank { path },
+                    videos = videosInFolder,
+                )
+            }
+            .sortedBy { it.displayName.lowercase() }
 
     fun setSortOption(option: SortOption) {
         sortOption.value = option

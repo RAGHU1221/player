@@ -49,6 +49,7 @@ fun VideoCard(
     val colors = MaterialTheme.nexoraColors
     Column(
         modifier = modifier
+            .neumorphic(cornerRadius = NexoraRadius.Card)
             .clip(RoundedCornerShape(NexoraRadius.Card))
             .background(colors.surface)
             .combinedClickable(onClick = onClick, onLongClick = onMoreClick),

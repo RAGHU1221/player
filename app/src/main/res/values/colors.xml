@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- XML-side mirror of ui/theme/Color.kt, used only where Compose can't reach
-         (manifest theme, launcher icon, splash window background). -->
-    <color name="navy_gradient_top">#FF5B6B99</color>
-    <color name="navy_gradient_bottom">#FF2C3350</color>
-    <color name="navy_glass_surface">#FF141A2E</color>
-    <color name="accent_red">#FFE8443D</color>
-    <color name="accent_green">#FF3ECF8E</color>
-    <color name="text_primary">#FFF5F6FA</color>
+         (manifest theme window background before the first Compose frame, and the
+         launcher icon, which keeps its own fixed brand colors). -->
+    <color name="navy_glass_surface">#FF24252A</color>
     <color name="ic_launcher_background">#FF141A2E</color>
 </resources>

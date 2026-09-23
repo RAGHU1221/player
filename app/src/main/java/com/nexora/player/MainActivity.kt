@@ -8,12 +8,15 @@ import android.util.Rational
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.view.WindowCompat
 import androidx.media3.common.util.UnstableApi
 import com.nexora.player.data.datastore.AppSettings
 import com.nexora.player.ui.navigation.NexoraNavHost
 import com.nexora.player.ui.theme.NexoraTheme
+import com.nexora.player.ui.theme.toExtendedColors
 
 @UnstableApi
 class MainActivity : ComponentActivity() {
@@ -25,6 +28,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             val app = application as NexoraApplication
             val settings by app.settingsDataStore.settingsFlow.collectAsState(initial = AppSettings())
+
+            // Neumorphic Light needs dark status/nav bar icons to stay visible on its
+            // pale background; Neumorphic Dark keeps the light icons it always had.
+            val isLightTheme = settings.themeVariant.toExtendedColors().isLight
+            SideEffect {
+                val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+                insetsController.isAppearanceLightStatusBars = isLightTheme
+                insetsController.isAppearanceLightNavigationBars = isLightTheme
+            }
 
             NexoraTheme(variant = settings.themeVariant) {
                 NexoraNavHost()
