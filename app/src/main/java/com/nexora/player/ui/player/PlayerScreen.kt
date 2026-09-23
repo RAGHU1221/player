@@ -101,11 +101,21 @@ fun PlayerScreen(videoId: Long, onBack: () -> Unit, onOpenDetails: (Long) -> Uni
         }
     }
 
+    // AUTO always opens the player in portrait first (regardless of the video's own
+    // shape or which way the phone happens to be held), then — once playback actually
+    // starts — hands orientation control over to the device sensor, so the user can
+    // freely turn the phone to landscape (or back to portrait) at any point while
+    // watching. PORTRAIT_LOCK/LANDSCAPE_LOCK stay hard-locked, as before.
     LaunchedEffect(state.appSettings.rotationMode) {
         activity?.requestedOrientation = when (state.appSettings.rotationMode) {
-            RotationMode.AUTO -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             RotationMode.PORTRAIT_LOCK -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             RotationMode.LANDSCAPE_LOCK -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            RotationMode.AUTO -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+    LaunchedEffect(state.appSettings.rotationMode, state.playback.isPlaying) {
+        if (state.appSettings.rotationMode == RotationMode.AUTO && state.playback.isPlaying) {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
         }
     }
 
