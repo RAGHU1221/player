@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -62,11 +63,15 @@ fun PlayerScreen(videoId: Long, onBack: () -> Unit, onOpenDetails: (Long) -> Uni
     val app = context.nexoraApp()
     val activity = context as? Activity
 
+    // Lets Next/Previous swap which video this screen plays without leaving the
+    // player screen — reuses the existing "one PlayerViewModel per id" pattern below.
+    var currentVideoId by rememberSaveable(videoId) { mutableStateOf(videoId) }
+
     val viewModel: PlayerViewModel = viewModel(
-        key = "player_$videoId",
+        key = "player_$currentVideoId",
         factory = GenericViewModelFactory {
             PlayerViewModel(
-                videoId = videoId,
+                videoId = currentVideoId,
                 videoRepository = app.videoRepository,
                 historyRepository = app.historyRepository,
                 settingsDataStore = app.settingsDataStore,
@@ -214,6 +219,20 @@ fun PlayerScreen(videoId: Long, onBack: () -> Unit, onOpenDetails: (Long) -> Uni
             onAspectRatioClick = { activeSheet = ActiveSheet.ASPECT_RATIO },
             onSettingsClick = { activeSheet = ActiveSheet.SUBTITLE_STYLE },
             onPipClick = { activity?.enterNexoraPip() },
+            hasPrevious = state.previousVideoId != null,
+            hasNext = state.nextVideoId != null,
+            onPrevious = {
+                state.previousVideoId?.let { id ->
+                    viewModel.saveProgressNow()
+                    currentVideoId = id
+                }
+            },
+            onNext = {
+                state.nextVideoId?.let { id ->
+                    viewModel.saveProgressNow()
+                    currentVideoId = id
+                }
+            },
             modifier = Modifier.fillMaxSize(),
         )
 

@@ -24,6 +24,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay10
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Subtitles
 import androidx.compose.material.icons.filled.AspectRatio
 import androidx.compose.material.icons.filled.Audiotrack
@@ -64,6 +66,10 @@ fun ControlsOverlay(
     onAspectRatioClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onPipClick: () -> Unit,
+    hasPrevious: Boolean = false,
+    hasNext: Boolean = false,
+    onPrevious: () -> Unit = {},
+    onNext: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val colors = MaterialTheme.nexoraColors
@@ -112,15 +118,31 @@ fun ControlsOverlay(
             // Center transport
             Row(
                 modifier = Modifier.align(Alignment.Center),
-                horizontalArrangement = Arrangement.spacedBy(36.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                IconButton(onClick = onPrevious, enabled = hasPrevious, modifier = Modifier.size(44.dp)) {
+                    Icon(
+                        Icons.Filled.SkipPrevious,
+                        contentDescription = "Previous video",
+                        tint = Color.White.copy(alpha = if (hasPrevious) 1f else 0.35f),
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
                 IconButton(onClick = onSeekBack, modifier = Modifier.size(52.dp)) {
                     Icon(Icons.Filled.Replay10, contentDescription = "Rewind 10s", tint = Color.White, modifier = Modifier.size(36.dp))
                 }
                 CenterPlayButton(playback = playback, onClick = onPlayPause)
                 IconButton(onClick = onSeekForward, modifier = Modifier.size(52.dp)) {
                     Icon(Icons.Filled.Forward10, contentDescription = "Forward 10s", tint = Color.White, modifier = Modifier.size(36.dp))
+                }
+                IconButton(onClick = onNext, enabled = hasNext, modifier = Modifier.size(44.dp)) {
+                    Icon(
+                        Icons.Filled.SkipNext,
+                        contentDescription = "Next video",
+                        tint = Color.White.copy(alpha = if (hasNext) 1f else 0.35f),
+                        modifier = Modifier.size(30.dp),
+                    )
                 }
             }
 

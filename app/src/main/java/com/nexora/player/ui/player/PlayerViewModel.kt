@@ -3,6 +3,7 @@ package com.nexora.player.ui.player
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
@@ -24,6 +25,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -37,6 +41,10 @@ data class PlayerScreenState(
     val appSettings: AppSettings = AppSettings(),
     val zoomScale: Float = 1f,
     val isReady: Boolean = false,
+    /** Id of the previous/next video in the same folder (by filename order), or
+     * null at either end of the folder — drives the Previous/Next transport buttons. */
+    val previousVideoId: Long? = null,
+    val nextVideoId: Long? = null,
 )
 
 /**
@@ -61,6 +69,23 @@ class PlayerViewModel(
     private val zoomScale = MutableStateFlow(1f)
     private val isReady = MutableStateFlow(false)
 
+    /** The previous/next video id within the same folder, ordered by filename — the
+     * natural "up next" sequence for a folder of episodes/clips (section: transport). */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val adjacentVideoIds = videoRepository.observeById(videoId).flatMapLatest { video ->
+        if (video == null) {
+            flowOf(null as Long? to null as Long?)
+        } else {
+            videoRepository.observeByFolder(video.folderPath).map { siblings ->
+                val ordered = siblings.sortedBy { it.filename.lowercase() }
+                val index = ordered.indexOfFirst { it.id == videoId }
+                val previous = if (index > 0) ordered[index - 1].id else null
+                val next = if (index in 0 until ordered.lastIndex) ordered[index + 1].id else null
+                previous to next
+            }
+        }
+    }
+
     val uiState: StateFlow<PlayerScreenState> = combine(
         videoRepository.observeById(videoId),
         controller.state,
@@ -70,7 +95,10 @@ class PlayerViewModel(
         settingsDataStore.settingsFlow,
         zoomScale,
         isReady,
+        adjacentVideoIds,
     ) { flows ->
+        @Suppress("UNCHECKED_CAST")
+        val adjacent = flows[8] as Pair<Long?, Long?>
         PlayerScreenState(
             video = flows[0] as Video?,
             playback = flows[1] as PlayerUiState,
@@ -80,6 +108,8 @@ class PlayerViewModel(
             appSettings = flows[5] as AppSettings,
             zoomScale = flows[6] as Float,
             isReady = flows[7] as Boolean,
+            previousVideoId = adjacent.first,
+            nextVideoId = adjacent.second,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), PlayerScreenState())
 
