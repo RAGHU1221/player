@@ -31,10 +31,14 @@ android {
         // (ideally injected via environment variables / gradle.properties that are
         // NOT committed to version control) before shipping a signed release build.
         create("release") {
-            val keystorePath = System.getenv("NEXORA_KEYSTORE_PATH") ?: "release-keystore.jks"
-            val ksPass = System.getenv("NEXORA_KEYSTORE_PASSWORD") ?: "changeit"
-            val ksAlias = System.getenv("NEXORA_KEY_ALIAS") ?: "nexora"
-            val ksKeyPass = System.getenv("NEXORA_KEY_PASSWORD") ?: "changeit"
+            // GitHub Actions sets these env vars to an EMPTY STRING (not unset/null)
+            // when the corresponding repo secret hasn't been configured, so a plain
+            // `?:` fallback never kicks in and `file("")` blows up the whole build.
+            // Guard with isNotBlank() so an empty secret is treated the same as no secret.
+            val keystorePath = System.getenv("NEXORA_KEYSTORE_PATH")?.takeIf { it.isNotBlank() } ?: "release-keystore.jks"
+            val ksPass = System.getenv("NEXORA_KEYSTORE_PASSWORD")?.takeIf { it.isNotBlank() } ?: "changeit"
+            val ksAlias = System.getenv("NEXORA_KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "nexora"
+            val ksKeyPass = System.getenv("NEXORA_KEY_PASSWORD")?.takeIf { it.isNotBlank() } ?: "changeit"
             val keystoreFile = file(keystorePath)
             if (keystoreFile.exists()) {
                 storeFile = keystoreFile
@@ -58,7 +62,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Falls back to debug signing automatically if the release keystore above
             // is not present, so `assembleRelease` still produces an installable APK.
-            signingConfig = if (file(System.getenv("NEXORA_KEYSTORE_PATH") ?: "release-keystore.jks").exists()) {
+            signingConfig = if (file(System.getenv("NEXORA_KEYSTORE_PATH")?.takeIf { it.isNotBlank() } ?: "release-keystore.jks").exists()) {
                 signingConfigs.getByName("release")
             } else {
                 signingConfigs.getByName("debug")
