@@ -67,11 +67,6 @@ class PlayerController(context: Context, preferSoftwareFallback: Boolean = true)
     private var tickerJob: Job? = null
     private var speedBeforeLongPressBoost: Float? = null
 
-    init {
-        player.addListener(playerListener)
-        startPositionTicker()
-    }
-
     private val playerListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             _state.value = _state.value.copy(isPlaying = isPlaying)
@@ -114,6 +109,11 @@ class PlayerController(context: Context, preferSoftwareFallback: Boolean = true)
                 error = null,
             )
         }
+    }
+
+    init {
+        player.addListener(playerListener)
+        startPositionTicker()
     }
 
     private fun startPositionTicker() {

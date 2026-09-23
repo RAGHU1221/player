@@ -256,6 +256,7 @@ private fun QuickStatsRow(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun StatTile(
     icon: androidx.compose.ui.graphics.vector.ImageVector,

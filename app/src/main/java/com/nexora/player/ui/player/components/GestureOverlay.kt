@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -121,7 +122,7 @@ fun GestureOverlay(
             }
             .pointerInput(enabled) {
                 if (!enabled) return@pointerInput
-                androidx.compose.foundation.gestures.detectDragGestures(
+                detectDragGestures(
                     onDragStart = { dragAxis = DragAxis.NONE; accumulatedSeekMs = 0f },
                     onDragEnd = {
                         if (dragAxis == DragAxis.HORIZONTAL_SEEK) onSeekDragCommit()
