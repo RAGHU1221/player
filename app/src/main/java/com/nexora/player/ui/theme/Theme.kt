@@ -12,15 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-/** Neumorphism (soft-UI) theme, persisted via DataStore (see [com.nexora.player.data.datastore.SettingsDataStore]). */
+/** "Glow" theme (dark glass + neon accent), persisted via DataStore (see [com.nexora.player.data.datastore.SettingsDataStore]). */
 enum class NexoraThemeVariant(val displayName: String) {
-    NEUMORPHIC_LIGHT("Light"),
-    NEUMORPHIC_DARK("Dark"),
+    GLOW_LIGHT("Light"),
+    GLOW_DARK("Dark"),
 }
 
 /**
  * Tokens that Material3's [androidx.compose.material3.ColorScheme] doesn't model
- * directly (the two neumorphic shadow tones, glow colors, status colors). Every
+ * directly (glass border/shadow tones, the accent glow, status colors). Every
  * screen, card, control and dialog reads from this local instead of hard-coded
  * colors so switching [NexoraThemeVariant] restyles the whole app at once.
  */
@@ -32,12 +32,13 @@ data class NexoraExtendedColors(
     val surfaceElevated: Color,
     val glassBorder: Color,
     val glassBorderStrong: Color,
-    /** Highlight shadow — sits toward the top-left of a raised neumorphic surface. */
+    /** Frosted glass rim highlight drawn around raised surfaces. */
     val shadowLight: Color,
-    /** Umbra shadow — sits toward the bottom-right of a raised neumorphic surface. */
+    /** Ambient drop-shadow color a raised surface casts on the backdrop. */
     val shadowDark: Color,
     val accent: Color,
     val accentDim: Color,
+    /** Soft, wide-blurred accent color used for the neon glow behind active controls. */
     val accentGlow: Color,
     /** Muted secondary accent (used for less prominent selected/active controls). */
     val accentSecondary: Color,
@@ -58,70 +59,70 @@ data class NexoraExtendedColors(
         get() = Brush.verticalGradient(listOf(gradientTop, gradientBottom))
 }
 
-private fun neumorphicLight() = NexoraExtendedColors(
+private fun glowLight() = NexoraExtendedColors(
     isLight = true,
-    gradientTop = NeuLightBase,
-    gradientBottom = NeuLightBase,
-    surface = NeuLightBase,
-    surfaceElevated = NeuLightBaseElevated,
-    glassBorder = NeuLightShadowDark.copy(alpha = 0.25f),
-    glassBorderStrong = NeuLightShadowDark.copy(alpha = 0.4f),
-    shadowLight = NeuLightShadowLight,
-    shadowDark = NeuLightShadowDark,
-    accent = NeuLightAccent,
-    accentDim = NeuLightAccent.copy(alpha = 0.6f),
-    accentGlow = NeuLightAccent.copy(alpha = 0.35f),
-    accentSecondary = NeuLightAccentSecondary,
-    danger = NeuLightDanger,
-    statusActive = NeuLightSuccess,
-    statusActiveGlow = NeuLightSuccess.copy(alpha = 0.35f),
-    statusWarning = NeuLightWarning,
-    textPrimary = NeuLightTextPrimary,
-    textSecondary = NeuLightTextSecondary,
-    textTertiary = NeuLightTextTertiary,
-    divider = NeuLightShadowDark.copy(alpha = 0.4f),
+    gradientTop = GlowLightGradientTop,
+    gradientBottom = GlowLightGradientBottom,
+    surface = GlowLightSurface,
+    surfaceElevated = GlowLightSurfaceElevated,
+    glassBorder = GlowLightBorder,
+    glassBorderStrong = GlowLightBorderStrong,
+    shadowLight = GlowLightBorder,
+    shadowDark = GlowLightShadow,
+    accent = GlowLightAccent,
+    accentDim = GlowLightAccent.copy(alpha = 0.6f),
+    accentGlow = GlowLightAccent.copy(alpha = 0.35f),
+    accentSecondary = GlowLightAccentSecondary,
+    danger = GlowLightDanger,
+    statusActive = GlowLightSuccess,
+    statusActiveGlow = GlowLightSuccess.copy(alpha = 0.35f),
+    statusWarning = GlowLightWarning,
+    textPrimary = GlowLightTextPrimary,
+    textSecondary = GlowLightTextSecondary,
+    textTertiary = GlowLightTextTertiary,
+    divider = GlowLightBorderStrong,
     badgeBackground = BadgeBackground,
     scrimStrong = ScrimStrong,
     scrimSoft = ScrimSoft,
 )
 
-private fun neumorphicDark() = NexoraExtendedColors(
+private fun glowDark() = NexoraExtendedColors(
     isLight = false,
-    gradientTop = NeuDarkBase,
-    gradientBottom = NeuDarkBase,
-    surface = NeuDarkBase,
-    surfaceElevated = NeuDarkBaseElevated,
-    glassBorder = NeuDarkShadowDark.copy(alpha = 0.6f),
-    glassBorderStrong = NeuDarkShadowDark.copy(alpha = 0.8f),
-    shadowLight = NeuDarkShadowLight,
-    shadowDark = NeuDarkShadowDark,
-    accent = NeuDarkAccent,
-    accentDim = NeuDarkAccent.copy(alpha = 0.6f),
-    accentGlow = NeuDarkAccent.copy(alpha = 0.35f),
-    accentSecondary = NeuDarkAccentSecondary,
-    danger = NeuDarkDanger,
-    statusActive = NeuDarkSuccess,
-    statusActiveGlow = NeuDarkSuccess.copy(alpha = 0.35f),
-    statusWarning = NeuDarkWarning,
-    textPrimary = NeuDarkTextPrimary,
-    textSecondary = NeuDarkTextSecondary,
-    textTertiary = NeuDarkTextTertiary,
-    divider = NeuDarkShadowDark.copy(alpha = 0.6f),
+    gradientTop = GlowDarkGradientTop,
+    gradientBottom = GlowDarkGradientBottom,
+    surface = GlowDarkSurface,
+    surfaceElevated = GlowDarkSurfaceElevated,
+    glassBorder = GlowDarkBorder,
+    glassBorderStrong = GlowDarkBorderStrong,
+    shadowLight = GlowDarkBorder,
+    shadowDark = GlowDarkShadow,
+    accent = GlowDarkAccent,
+    accentDim = GlowDarkAccent.copy(alpha = 0.6f),
+    accentGlow = GlowDarkAccent.copy(alpha = 0.45f),
+    accentSecondary = GlowDarkAccentSecondary,
+    danger = GlowDarkDanger,
+    statusActive = GlowDarkSuccess,
+    statusActiveGlow = GlowDarkSuccess.copy(alpha = 0.4f),
+    statusWarning = GlowDarkWarning,
+    textPrimary = GlowDarkTextPrimary,
+    textSecondary = GlowDarkTextSecondary,
+    textTertiary = GlowDarkTextTertiary,
+    divider = GlowDarkBorderStrong,
     badgeBackground = BadgeBackground,
     scrimStrong = ScrimStrong,
     scrimSoft = ScrimSoft,
 )
 
 fun NexoraThemeVariant.toExtendedColors(): NexoraExtendedColors = when (this) {
-    NexoraThemeVariant.NEUMORPHIC_LIGHT -> neumorphicLight()
-    NexoraThemeVariant.NEUMORPHIC_DARK -> neumorphicDark()
+    NexoraThemeVariant.GLOW_LIGHT -> glowLight()
+    NexoraThemeVariant.GLOW_DARK -> glowDark()
 }
 
-val LocalNexoraColors = staticCompositionLocalOf { neumorphicDark() }
+val LocalNexoraColors = staticCompositionLocalOf { glowDark() }
 
 @Composable
 fun NexoraTheme(
-    variant: NexoraThemeVariant = NexoraThemeVariant.NEUMORPHIC_DARK,
+    variant: NexoraThemeVariant = NexoraThemeVariant.GLOW_DARK,
     content: @Composable () -> Unit,
 ) {
     val extended = variant.toExtendedColors()
@@ -175,8 +176,10 @@ val MaterialTheme.nexoraColors: NexoraExtendedColors
     @Composable
     get() = LocalNexoraColors.current
 
-/** Full-bleed flat backdrop used behind every top-level screen (same color as every
- * neumorphic card, per the soft-UI convention — depth comes from shadows, not contrast). */
+/** Full-bleed backdrop used behind every top-level screen — a subtle vertical
+ * gradient from [NexoraExtendedColors.gradientTop] into
+ * [NexoraExtendedColors.gradientBottom], giving the glass cards drawn on top of
+ * it some depth to sit in. */
 fun Modifier.nexoraBackground(colors: NexoraExtendedColors): Modifier =
     this
         .fillMaxSize()

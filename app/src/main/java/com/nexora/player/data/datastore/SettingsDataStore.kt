@@ -23,7 +23,7 @@ enum class RotationMode { AUTO, PORTRAIT_LOCK, LANDSCAPE_LOCK }
  * *specific* video the last time they watched it.
  */
 data class AppSettings(
-    val themeVariant: NexoraThemeVariant = NexoraThemeVariant.NEUMORPHIC_DARK,
+    val themeVariant: NexoraThemeVariant = NexoraThemeVariant.GLOW_DARK,
     val autoplay: Boolean = true,
     val resumePlaybackEnabled: Boolean = true,
     val backgroundAudioEnabled: Boolean = true,
@@ -71,7 +71,7 @@ class SettingsDataStore(private val context: Context) {
     val settingsFlow: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
             themeVariant = prefs[Keys.THEME]?.let { runCatching { NexoraThemeVariant.valueOf(it) }.getOrNull() }
-                ?: NexoraThemeVariant.NEUMORPHIC_DARK,
+                ?: NexoraThemeVariant.GLOW_DARK,
             autoplay = prefs[Keys.AUTOPLAY] ?: true,
             resumePlaybackEnabled = prefs[Keys.RESUME] ?: true,
             backgroundAudioEnabled = prefs[Keys.BACKGROUND_AUDIO] ?: true,

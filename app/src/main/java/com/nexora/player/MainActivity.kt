@@ -29,8 +29,8 @@ class MainActivity : ComponentActivity() {
             val app = application as NexoraApplication
             val settings by app.settingsDataStore.settingsFlow.collectAsState(initial = AppSettings())
 
-            // Neumorphic Light needs dark status/nav bar icons to stay visible on its
-            // pale background; Neumorphic Dark keeps the light icons it always had.
+            // Glow Light needs dark status/nav bar icons to stay visible on its pale
+            // background; Glow Dark keeps the light icons it always had.
             val isLightTheme = settings.themeVariant.toExtendedColors().isLight
             SideEffect {
                 val insetsController = WindowCompat.getInsetsController(window, window.decorView)

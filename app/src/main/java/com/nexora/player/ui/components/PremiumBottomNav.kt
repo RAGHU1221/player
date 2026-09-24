@@ -75,9 +75,9 @@ private fun NavItem(item: BottomNavItem, selected: Boolean, onClick: () -> Unit)
             .clickable(indication = null, interactionSource = interactionSource, onClick = onClick)
             .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
-        // Selected tab reads as a pressed-in ("inset") neumorphic pill behind the
-        // icon — the classic soft-UI way to show an active control, in place of
-        // a flat accent-colored underline.
+        // Selected tab reads as a glowing pill behind the icon — an accent-colored
+        // neon ring, echoing the reference design's glowing accent controls — in
+        // place of a flat underline.
         Box(
             modifier = Modifier
                 .size(40.dp)

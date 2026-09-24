@@ -13,12 +13,11 @@ import com.nexora.player.ui.theme.NexoraRadius
 import com.nexora.player.ui.theme.nexoraColors
 
 /**
- * The single reusable surface behind every card in the app: a raised neumorphic
- * ("soft-UI") panel — same base color as the page background, with a light
- * highlight and dark umbra shadow standing in for a border. Every list row,
- * stat tile and bottom sheet builds on this instead of Material's default Card,
- * which is how the whole app stays visually consistent with the neumorphism
- * reference design.
+ * The single reusable surface behind every card in the app: a dark frosted-glass
+ * panel with a soft ambient shadow and a thin glass-edge rim standing in for a
+ * border. Every list row, stat tile and bottom sheet builds on this instead of
+ * Material's default Card, which is how the whole app stays visually consistent
+ * with the "glow" reference design.
  */
 @Composable
 fun GlassCard(
@@ -30,8 +29,8 @@ fun GlassCard(
     containerColor: Color = MaterialTheme.nexoraColors.surface,
     content: @Composable () -> Unit,
 ) {
-    // Neumorphic cards use a light/dark shadow pair (from .neumorphic) instead of
-    // a hairline border for depth; borderColor is kept only for source
+    // Glow cards get their depth from a shadow + glass rim (from .neumorphic)
+    // instead of a plain hairline border; borderColor is kept only for source
     // compatibility with existing call sites.
     Box(
         modifier = modifier

@@ -3,6 +3,6 @@
     <!-- XML-side mirror of ui/theme/Color.kt, used only where Compose can't reach
          (manifest theme window background before the first Compose frame, and the
          launcher icon, which keeps its own fixed brand colors). -->
-    <color name="navy_glass_surface">#FF24252A</color>
+    <color name="navy_glass_surface">#FF07080B</color>
     <color name="ic_launcher_background">#FF141A2E</color>
 </resources>
